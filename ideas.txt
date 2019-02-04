@@ -1,0 +1,43 @@
+use a recurrent neural net because the next speed depends a lot on the speed for it.
+
+
+the problem isn't at all about image classification. it's about linear regression: predicting a continuous variable based on a an input value
+
+this is a task that a machine can comfortably outperform a human.
+
+MODEL:
+basic multilayer perception network
+input can be:
+	2 consecutive images
+	N consecutive images
+	some kind of difference operation applied on consecutive images
+		why? a larger "difference" indicates that a lot has happened between the
+		frames. but the difference operator needs to be constructed in such a
+		way that only changes in the marks on the road (and possibly other stati
+		onary objects? like trees, walls) are considered.
+			-so using this approach I would create a separate model (cnn) to
+			detect objects that are known to be stationary.
+			-then, using the set of pixels in the image output by this model
+			which indicate the locations in the image of stationary objects,
+			I would take the difference between positions of these objects in successive
+			images.
+			-For example the object detection model that recognizes other cars would not pick them as
+			stationary objects (because your speed is independent of the other car's speed)
+
+			-in a theoretical environment where there are no indicators to measure the car's speed,
+			this task is impossible without a different camera angle. In this case, a perdiction of
+			the speed that would minimize the loss is the mean value of the training set.
+
+
+			consider the optical flow vectors that have direction like this: / and \
+											/       \
+			This is because when a car is moving north, the textture on the road and
+			on the sides will slide south. And because of the perspective, the angle
+			off the vertical is slightly tilted
+
+
+			you can literally have one feature / pair of images:
+			the mean of all the optical flow vectors within a thresholded direction.
+			that's literally one feature per pair of frames!!
+
+			
